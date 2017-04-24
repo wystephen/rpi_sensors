@@ -10,35 +10,6 @@ import sched, time
 import binascii
 from struct import *
 
-i2c = smbus.SMBus(1)
-addr = 0x68
-t0 = time.time()
-
-
-# ====== initial zone ======
-try:
-    device_id = i2c.read_byte_data(addr, 0x75)
-    print "Device ID:" + str(hex(device_id))
-    print "MPU9250 I2C Connected."
-    print ""
-except:
-    print "Connect failed"
-    print ""
-i2c.write_byte_data(0x68, 0x6a, 0x00)
-time.sleep(0.05);
-i2c.write_byte_data(0x68, 0x37, 0x02)
-i2c.write_byte_data(0x0c, 0x0a, 0x16)
-
-# set frequence for accelerator
-i2c.write_byte_data(0x68, 29, 9)
-
-print " after write"
-
-
-# enable fifo and dmp
-# i2c.write_byte_data(0x68 , 106 , 32+64);
-
-# ====== intial done ======
 
 
 
@@ -61,6 +32,9 @@ def mpu9250_data_get_and_write():
     xyz_mag = i2c.read_i2c_block_data(0x0c, 0x03, 6)
     # print("xyz_mag"+str(list2word(xyz_mag)))
     xyz_mag_adj = i2c.read_i2c_block_data(0x0c, 0x10, 3)
+    print("xyz_mag:",xyz_mag)
+    print("xyz mag_adj:",xyz_mag_adj)
+    #print("xyzmag:",str(list2word(xyz_mag_adj,calc_gyro_value)))
 
 
 def list2word(data_list=[], callback=''):
@@ -110,5 +84,35 @@ def while_true_method():
         pass
     # break;
 
+if __name__ == '__main__':
+    i2c = smbus.SMBus(1)
+    addr = 0x68
+    t0 = time.time()
 
-while_true_method();
+
+    # ====== initial zone ======
+    try:
+        device_id = i2c.read_byte_data(addr, 0x75)
+        print "Device ID:" + str(hex(device_id))
+        print "MPU9250 I2C Connected."
+        print ""
+    except:
+        print "Connect failed"
+        print ""
+    i2c.write_byte_data(0x68, 0x6a, 0x00)
+    time.sleep(0.05);
+    i2c.write_byte_data(0x68, 0x37, 0x02)
+    i2c.write_byte_data(0x0c, 0x0a, 0x16)
+
+    # set frequence for accelerator
+    i2c.write_byte_data(0x68, 29, 9)
+
+    print " after write"
+
+
+    # enable fifo and dmp
+    # i2c.write_byte_data(0x68 , 106 , 32+64);
+
+    # ====== intial done ======
+
+    while_true_method();
