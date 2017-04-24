@@ -32,7 +32,7 @@ def mpu9250_data_get_and_write():
     xyz_mag = i2c.read_i2c_block_data(0x0c, 0x00, 6)
     # print("xyz_mag"+str(list2word(xyz_mag)))
     xyz_mag_adj = i2c.read_i2c_block_data(0x0c, 0x10, 3)
-    # i2c.write_byte_data(0x0c,0x0a,0x01)
+    i2c.write_byte_data(0x0c,0x0a,0x01)
     print("xyz_mag:",xyz_mag)
     print("xyz mag_adj:",xyz_mag_adj)
     #print("xyzmag:",str(list2word(xyz_mag_adj,calc_gyro_value)))
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     time.sleep(0.05);
     i2c.write_byte_data(0x68, 0x37, 0x02)
     time.sleep(0.05)
-    i2c.write_byte_data(0x0c, 0x0a, 0x16) # 0110 continuous measurement mode 2
+    i2c.write_byte_data(0x0c, 0x0a, 0x11) # 0110 continuous measurement mode 2
 
     # set frequence for accelerator
     i2c.write_byte_data(0x68, 29, 9)
